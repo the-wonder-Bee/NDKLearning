@@ -15,8 +15,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/liaofeng)
 #添加一个第三方库， 当开发需要生成一个新的so库的时候
 add_library( # Sets the name of the library.
              native-lib
-#             SHARED
-        STATIC
+             SHARED
+#        STATIC
         #指定native-lib库的源文件,不需要加头文件,源文件可以写多个
              native-lib.cpp
              test.cpp

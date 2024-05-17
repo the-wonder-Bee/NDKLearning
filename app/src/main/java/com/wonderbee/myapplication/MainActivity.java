@@ -4,9 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.wonderbee.baselib.MainClient;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final  String TAG  = "MainActivity";
@@ -60,6 +61,20 @@ public class MainActivity extends AppCompatActivity {
 
         testVoid();
 
+        try {
+            testThrowException();
+        }catch (Exception e) {
+            Log.d(TAG, "onCreate: "+e.getMessage());
+            Log.d(TAG, "onCreate: "+e.getClass().getName());
+        }
+
+        List<Student> studentList = getStudentList(5);
+        Log.d(TAG, "onCreate: "+studentList.getClass().getName());
+        for (Student student : studentList) {
+            Log.d(TAG, "onCreate: "+student);
+        }
+
+        testThread();
     }
 
     /**
@@ -93,8 +108,14 @@ public class MainActivity extends AppCompatActivity {
 
     public native String[] getStringArray(int left, int right, String value);
 
+    public native List<Student> getStudentList(int size);
+
     public native Student getStudent();
 
     public native void testVoid();
+
+    public native void testThrowException();
+
+    public native void testThread();
 
 }

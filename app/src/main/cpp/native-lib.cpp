@@ -1,11 +1,11 @@
 #include <jni.h>
 #include <string>
 #include <android/log.h>
+#include <threads.h>
+#include "pthread.h"
+#include "test.h"
 
 //定义打印宏 __VA_ARGS__代表可变参数
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,"##Jni:DRM",__VA_ARGS__)
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO,"##Jni:DRM",__VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"##Jni:DRM",__VA_ARGS__)
 
 jstring  stringFromJNI(JNIEnv* env, jobject /* this */) {
     std::string hello = "Hello from C++动态注册";
@@ -16,17 +16,13 @@ jstring  stringFromJNI(JNIEnv* env, jobject /* this */) {
 
 
 
-extern "C"
-JNIEXPORT jint JNICALL
-Java_com_wonderbee_myapplication_MainActivity_getSum(JNIEnv *env, jobject thiz, jint param1, jint param2) {
+jint getSum(JNIEnv *env, jobject thiz, jint param1, jint param2) {
     return param1+param2;
 }
 
 
 
-extern "C"
-JNIEXPORT jcharArray JNICALL
-Java_com_wonderbee_myapplication_MainActivity_getChars(JNIEnv *env, jobject thiz, jchar p,
+jcharArray getChars(JNIEnv *env, jobject thiz, jchar p,
                                                        jchar q) {
     jcharArray  array = env->NewCharArray(2);
     jchar  *array1 = env->GetCharArrayElements(array, NULL);
@@ -36,9 +32,7 @@ Java_com_wonderbee_myapplication_MainActivity_getChars(JNIEnv *env, jobject thiz
     return array;
 }
 
-extern "C"
-JNIEXPORT jbyteArray JNICALL
-Java_com_wonderbee_myapplication_MainActivity_getByteArray(JNIEnv *env, jobject thiz, jbyte left,
+jbyteArray getByteArray(JNIEnv *env, jobject thiz, jbyte left,
                                                            jbyte right) {
 
     jbyteArray byteArray = env->NewByteArray((jsize)(right  - left));
@@ -50,9 +44,7 @@ Java_com_wonderbee_myapplication_MainActivity_getByteArray(JNIEnv *env, jobject 
     return byteArray;
 }
 
-extern "C"
-JNIEXPORT jbooleanArray JNICALL
-Java_com_wonderbee_myapplication_MainActivity_getBooleanArray(JNIEnv *env, jobject thiz,
+jbooleanArray getBooleanArray(JNIEnv *env, jobject thiz,
                                                               jboolean is_true, jint size) {
     jbooleanArray booleanArray = env->NewBooleanArray(size);
     jboolean *boolean_array_elements = env->GetBooleanArrayElements(booleanArray, 0);
@@ -63,9 +55,7 @@ Java_com_wonderbee_myapplication_MainActivity_getBooleanArray(JNIEnv *env, jobje
     return booleanArray;
 }
 
-extern "C"
-JNIEXPORT jshortArray JNICALL
-Java_com_wonderbee_myapplication_MainActivity_getShortArray(JNIEnv *env, jobject thiz, jshort left,
+jshortArray getShortArray(JNIEnv *env, jobject thiz, jshort left,
                                                             jshort right) {
     jshortArray shortArray = env->NewShortArray((jint)(right-left));
     jshort* short_array_elements = env->GetShortArrayElements(shortArray, 0);
@@ -78,9 +68,7 @@ Java_com_wonderbee_myapplication_MainActivity_getShortArray(JNIEnv *env, jobject
 }
 
 
-extern "C"
-JNIEXPORT jintArray JNICALL
-Java_com_wonderbee_myapplication_MainActivity_getIntArray(JNIEnv *env, jobject thiz, jint left,
+jintArray getIntArray(JNIEnv *env, jobject thiz, jint left,
                                                             jint right) {
    jintArray intArray = env->NewIntArray(right-left);
    jint* int_array_elemets = env->GetIntArrayElements(intArray, 0);
@@ -91,9 +79,7 @@ Java_com_wonderbee_myapplication_MainActivity_getIntArray(JNIEnv *env, jobject t
     return intArray;
 }
 
-extern "C"
-JNIEXPORT jfloatArray
-JNICALL Java_com_wonderbee_myapplication_MainActivity_getFloatArray(JNIEnv *env, jobject obj,
+jfloatArray getFloatArray(JNIEnv *env, jobject obj,
                                                                     jint left, jint right, jfloat value){
     jfloatArray floatArray = env->NewFloatArray(right-left);
     jfloat* float_array_elements = env->GetFloatArrayElements(floatArray, 0);
@@ -104,9 +90,7 @@ JNICALL Java_com_wonderbee_myapplication_MainActivity_getFloatArray(JNIEnv *env,
     return floatArray;
 }
 
-extern "C"
-JNIEXPORT jdoubleArray
-JNICALL Java_com_wonderbee_myapplication_MainActivity_getDoubleArray(JNIEnv *env, jobject obj,
+jdoubleArray getDoubleArray(JNIEnv *env, jobject obj,
                                                                     jint left, jint right, jdouble value){
     jdoubleArray double_array = env->NewDoubleArray(right-left);
     jdouble* double_array_elements = env->GetDoubleArrayElements(double_array, 0);
@@ -118,9 +102,7 @@ JNICALL Java_com_wonderbee_myapplication_MainActivity_getDoubleArray(JNIEnv *env
 }
 
 
-extern "C"
-JNIEXPORT jobjectArray
-JNICALL Java_com_wonderbee_myapplication_MainActivity_getStringArray(JNIEnv* env, jobject obj,
+jobjectArray getStringArray(JNIEnv* env, jobject obj,
 
                                                                 jint left, jint right, jstring value) {
 
@@ -135,9 +117,7 @@ JNICALL Java_com_wonderbee_myapplication_MainActivity_getStringArray(JNIEnv* env
 }
 
 
-extern "C"
-JNIEXPORT jobject
-JNICALL Java_com_wonderbee_myapplication_MainActivity_getStudent(JNIEnv* env, jobject obj)
+jobject getStudent(JNIEnv* env, jobject obj)
 {
     jclass student_class_instance = env->FindClass(const_cast<char*>("com/wonderbee/myapplication/Student"));
     jmethodID  jmethodId = env->GetMethodID(student_class_instance, "<init>", "()V");
@@ -146,7 +126,57 @@ JNICALL Java_com_wonderbee_myapplication_MainActivity_getStudent(JNIEnv* env, jo
     jmethodID  setage = env->GetMethodID(student_class_instance, "setAge", "(I)V");
     env->CallVoidMethod(student, setname,env->NewStringUTF("jerry"));
     env->CallVoidMethod(student, setage, 18);
+
     return student;
+}
+
+void testVoid(JNIEnv *env, jobject thiz) {
+    LOGD("testVoid","测试 void返回值");
+}
+
+
+
+jobject getStudentList(JNIEnv *env, jobject thiz, jint size) {
+
+    char *list_name = "java/util/ArrayList";
+    char *student_name = "com/wonderbee/myapplication/Student";
+    jclass list_cls = env->FindClass(const_cast<char *>(list_name));
+    jclass student_cls = env->FindClass(const_cast<char *>(student_name));
+
+    jmethodID list_construct = env->GetMethodID(list_cls, "<init>", "()V");
+    jmethodID student_construct = env->GetMethodID(student_cls, "<init>", "()V");
+    jmethodID list_add = env->GetMethodID(list_cls, "add", "(ILjava/lang/Object;)V");
+    jobject list = env->NewObject(list_cls, list_construct);
+    for(int i=0; i<size; i++){
+        jobject student = env->NewObject(student_cls, student_construct);
+        env->CallVoidMethod(student, env->GetMethodID(student_cls, "setAge", "(I)V"), i);
+        env->CallVoidMethod(list, list_add, i, student);
+        env->DeleteLocalRef(student);
+    }
+    return list;
+}
+
+
+/**
+ * 测试jni如何抛出异常
+ * @param env
+ * @param thiz
+ */
+void testThrowException(JNIEnv *env, jobject thiz){
+    const char *exception_class_name = "java/lang/IllegalArgumentException";
+    jclass exception_cls = env->FindClass(exception_class_name);
+//    jmethodID construct_method = env->GetMethodID(exception_cls, "<init>", "(Ljava/lang/String;)V");
+//    jobject obj = env->NewObject(exception_cls, construct_method, env->NewStringUTF("jni抛出非法异常"));
+//    env->Throw(static_cast<jthrowable>(obj));
+    if (exception_cls == NULL) {
+        LOGE("testThrowException", "找不到异常");
+    }
+    env->ThrowNew(exception_cls, "jni抛出非法异常");  //抛出异常类
+}
+
+
+void testThread(JNIEnv *env, jobject thiz) {
+    testThread1();
 }
 
 
@@ -165,16 +195,22 @@ JNICALL JNI_OnLoad(JavaVM *vm, void *reversed) {
     }
     //native方法 第一个参数是 java中native方法名称  第二个参数是括号内是方法参数签名, 括号外是方法返回值签名  第三个参数是函数指针
     JNINativeMethod nativeMethod[] = {
-            {"stringFormJNI", "()Ljava/lang/String;", (void *)(stringFromJNI)}
+            {"stringFormJNI", "()Ljava/lang/String;", (void *)(stringFromJNI)},
+            {"getSum", "(II)I", (void *)getSum},
+            {"getByteArray", "(BB)[B", (void *)getByteArray},
+            {"getShortArray", "(SS)[S", (void *)getShortArray},
+            {"getChars", "(CC)[C", (void *)getChars},
+            {"getIntArray", "(II)[I", (void*)getIntArray},
+            {"getFloatArray", "(IIF)[F",(void *)getFloatArray},
+            {"getDoubleArray", "(IID)[D", (void *)getDoubleArray},
+            {"getBooleanArray", "(ZI)[Z", (void *)getBooleanArray},
+            {"getStringArray", "(IILjava/lang/String;)[Ljava/lang/String;",(void *)getStringArray},
+            {"getStudent", "()Lcom/wonderbee/myapplication/Student;", (void *)getStudent},
+            {"testVoid", "()V", (void *)testVoid},
+            {"testThrowException", "()V", (void *)testThrowException},
+            {"getStudentList", "(I)Ljava/util/List;",(void*)getStudentList},
+            {"testThread", "()V", (void *)testThread}
     };
-    env->RegisterNatives(class_name, nativeMethod, 1);
+    env->RegisterNatives(class_name, nativeMethod, sizeof(nativeMethod)/sizeof(nativeMethod[0]));
     return JNI_VERSION_1_6;
-}
-
-
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_com_wonderbee_myapplication_MainActivity_testVoid(JNIEnv *env, jobject thiz) {
-    LOGD("测试 void返回值");
 }
