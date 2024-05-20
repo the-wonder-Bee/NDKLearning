@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.wonderbee.myapplication"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -17,7 +17,7 @@ android {
         //指定cpp编译器
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++11"
+                cppFlags "-std=c++17"
                 abiFilters 'arm64-v8a', 'x86_64', 'x86' //指定编译器生成什么架构的so,生成的so决定他能运行在什么平台上
             }
         }

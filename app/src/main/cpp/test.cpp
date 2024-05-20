@@ -5,7 +5,7 @@
 #include "test.h"
 #include <pthread.h>
 #include <unistd.h>
-
+#include "log/android_log_util.h"
 void* res_p ;
 
 void *printHelloWord(void *pVoid){
@@ -26,8 +26,8 @@ void testThread1() {
        LOGD("NDK","exit");
        _exit(0);
    }
-   LOGD("NDK","thread return %d", (int)res_p);
+   LOGD("NDK","thread return %d", res_p);
    pthread_join(pthread, &res_p);
-   LOGD("NDK","thread return %d", (int)res_p);
+   LOGD("NDK","thread return %d", res_p);
 
 }

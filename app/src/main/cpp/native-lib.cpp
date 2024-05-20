@@ -4,6 +4,7 @@
 #include <threads.h>
 #include "pthread.h"
 #include "test.h"
+#include "threadLearn/two_thread_print_hello.h"
 
 //定义打印宏 __VA_ARGS__代表可变参数
 
@@ -138,8 +139,8 @@ void testVoid(JNIEnv *env, jobject thiz) {
 
 jobject getStudentList(JNIEnv *env, jobject thiz, jint size) {
 
-    char *list_name = "java/util/ArrayList";
-    char *student_name = "com/wonderbee/myapplication/Student";
+    const char *list_name = "java/util/ArrayList";
+    const char *student_name = "com/wonderbee/myapplication/Student";
     jclass list_cls = env->FindClass(const_cast<char *>(list_name));
     jclass student_cls = env->FindClass(const_cast<char *>(student_name));
 
@@ -176,7 +177,8 @@ void testThrowException(JNIEnv *env, jobject thiz){
 
 
 void testThread(JNIEnv *env, jobject thiz) {
-    testThread1();
+//    testThread1();
+    printNum();
 }
 
 

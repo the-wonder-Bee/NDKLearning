@@ -20,6 +20,8 @@ add_library( # Sets the name of the library.
         #指定native-lib库的源文件,不需要加头文件,源文件可以写多个
              native-lib.cpp
              test.cpp
+             log/android_log_util.cpp
+             threadLearn/two_thread_print_hello.cpp
         )
 
 
