@@ -22,6 +22,7 @@ add_library( # Sets the name of the library.
              test.cpp
              log/android_log_util.cpp
              threadLearn/two_thread_print_hello.cpp
+            netlearn/net_request.cpp
         )
 
 

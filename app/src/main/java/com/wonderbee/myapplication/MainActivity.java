@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.wonderbee.baselib.MainClient;
 
@@ -74,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: "+student);
         }
 
-        testThread();
+//        testThread();
+
+        String json = testNet();
+        TextView textView = findViewById(R.id.sample_text);
+        textView.setText(json);
+
     }
 
     /**
@@ -117,5 +123,5 @@ public class MainActivity extends AppCompatActivity {
     public native void testThrowException();
 
     public native void testThread();
-
+    public native String testNet();
 }

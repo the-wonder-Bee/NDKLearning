@@ -5,6 +5,7 @@
 #include "pthread.h"
 #include "test.h"
 #include "threadLearn/two_thread_print_hello.h"
+#include "netlearn/net_request.h"
 
 //定义打印宏 __VA_ARGS__代表可变参数
 
@@ -178,7 +179,12 @@ void testThrowException(JNIEnv *env, jobject thiz){
 
 void testThread(JNIEnv *env, jobject thiz) {
 //    testThread1();
-    printNum();
+//    printNum();
+}
+
+jstring testNet(JNIEnv *env, jobject thiz){
+    jstring json = env->NewStringUTF(const_cast<char *>(get_request()));
+    return json;
 }
 
 
@@ -211,7 +217,8 @@ JNICALL JNI_OnLoad(JavaVM *vm, void *reversed) {
             {"testVoid", "()V", (void *)testVoid},
             {"testThrowException", "()V", (void *)testThrowException},
             {"getStudentList", "(I)Ljava/util/List;",(void*)getStudentList},
-            {"testThread", "()V", (void *)testThread}
+            {"testThread", "()V", (void *)testThread},
+            {"testNet", "()Ljava/lang/String;", (void *)testNet}
     };
     env->RegisterNatives(class_name, nativeMethod, sizeof(nativeMethod)/sizeof(nativeMethod[0]));
     return JNI_VERSION_1_6;
